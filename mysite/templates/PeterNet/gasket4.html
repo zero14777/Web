@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<title>3D Sierpinski Gasket</title>
+
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+attribute vec3 vPosition;
+attribute vec3 vColor;
+varying vec4 color;
+uniform mat4 transform;
+uniform mat4 projection;
+
+void
+main()
+{
+	gl_Position = projection * transform * vec4(vPosition, 1.0);
+
+    color = vec4(vColor, 1.0);
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+   
+varying vec4 color;
+
+void
+main()
+{
+    gl_FragColor = color;
+}
+</script>
+
+<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="initShaders.js"></script>
+<script type="text/javascript" src="MV.js"></script>
+<script type="text/javascript" src="gasket4.js"></script>
+</head>   
+
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+<div id="mouseMode"></div>
+
+<div>
+Subdivisions 1 <input id="subdivideSlider" type="range"
+ min="1" max="6" step="1" value="1" />
+ 6
+</div>
+
+<button id="rotateX">RotateX</button>
+
+<button id="rotateY">RotateY</button>
+
+<button id="rotateZ">RotateZ</button>
+
+<p><b>INSTRUCTIONS</b>:</p>
+<p>-The Subdivisions slider lets you control how many subdivision the gasket has.</p>
+<p>-The RotateX, RotateY, and RotateZ buttons rotate the gasket 90 degrees around the gasket's X, Y and Z axes respectively.</p>
+<p>-The camera will always look at the gasket.</p>
+<p>-Press 'E' to swap between mouse modes. (You can't swap while holding down the mouse)</p>
+<p>-<b>Translate Mode</b>:</p>
+<p>-Click & Drag to move the gasket up, down, left, and right.</p>
+<p>-Press and hold 'W' or 'S' to move the gasket forward or backward.</p>
+<p>-<b>Rotate Mode</b>:</p>
+<p>-Click & Drag to rotate the gasket.</p>
+<p>-<b>Camera Mode</b>:</p>
+<p>-Click & Drag to move the camera up, down, left, and right.</p>
+<p>-Press and hold 'W' or 'S' to move the camera forward or backward.</p>
+<p>-<b>FOV Mode</b>:</p>
+<p>-Click & Drag up to decrease the field of view.(10 degree minimum)</p>
+<p>-Click & Drag down to increase the field of view.(170 degree maximum)</p>
+</body>
+
+</body>
+</html>

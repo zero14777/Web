@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<title>3D Sierpinski Gasket</title>
+
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+attribute vec3 vPosition;
+attribute vec3 vColor;
+attribute vec4 vNormal;
+varying vec4 color;
+varying vec3 N, L, E;
+varying vec3 shade;
+uniform mat4 transform;
+uniform mat4 projection;
+uniform vec4 lightPosition;
+uniform float shaders;
+
+void
+main()
+{
+	shade.x = shaders;
+	vec3 pos = -(transform * vec4(vPosition, 1.0)).xyz;
+	vec3 light = lightPosition.xyz;
+	L = normalize( light - pos );
+	E = -pos;
+	N = normalize((transform*vNormal).xyz);
+    color = vec4(vColor, 1.0);
+	gl_Position = projection * transform * vec4(vPosition, 1.0);
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+   
+varying vec4 color;
+varying vec3 N, L, E;
+varying vec3 shade;
+uniform vec4 ambientProduct;
+uniform vec4 diffuseProduct;
+uniform vec4 specularProduct;
+uniform float shininess;
+
+void
+main()
+{
+	vec4 colorf;
+	vec3 H = normalize(L + E);
+	vec4 ambient = ambientProduct;
+	
+	float Kd = max(dot(L, N), 0.0);
+	vec4 diffuse = Kd*diffuseProduct;
+	
+	float Ks = pow(max(dot(N, H), 0.0), shininess);
+	vec4 specular = Ks*specularProduct;
+	
+	if(dot(L, N) < 0.0)// specular showing on both sides
+	{
+		specular = vec4 (0.0, 0.0, 0.0, 1.0);
+	}
+	
+	colorf = ambient + diffuse + specular;
+	
+	if(dot(L, N) < 0.0)// specular showing on both sides
+	{
+		colorf = ambient;
+	}
+	
+	colorf.a = 1.0;
+	
+    gl_FragColor = color * colorf;
+	if (shade.x == 0.0) {
+		gl_FragColor = color;
+	}
+}
+</script>
+
+<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="initShaders.js"></script>
+<script type="text/javascript" src="MV.js"></script>
+<script type="text/javascript" src="gasket5.js"></script>
+</head>   
+
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+<div id="mouseMode"></div>
+
+<div>
+Subdivisions 1 <input id="subdivideSlider" type="range"
+ min="1" max="6" step="1" value="1" />
+ 6
+</div>
+
+<button id="rotateX">RotateX</button>
+
+<button id="rotateY">RotateY</button>
+
+<button id="rotateZ">RotateZ</button>
+
+<p><b>INSTRUCTIONS</b>:</p>
+<p>-The Subdivisions slider lets you control how many polygons are in your sphere.</p>
+<p>-The RotateX, RotateY, and RotateZ buttons rotate the sphere 90 degrees around the sphere's X, Y and Z axes respectively.</p>
+<p>-The camera will always look at the sphere.</p>
+<p>-Press 'T' to change the ground plane between a bump mapped flat plane and altitude data from Hawaii.(Takes a second to load)</p>
+<p>-Press 'R' to toggle on and off the lighting shader.</p>
+<p>-Press 'E' to swap between mouse modes. (You can't swap while holding down the mouse)</p>
+<p>-<b>Translate Mode</b>:</p>
+<p>-Click & Drag to move the sphere up, down, left, and right.</p>
+<p>-Press and hold 'W' or 'S' to move the sphere forward or backward.</p>
+<p>-<b>Rotate Mode</b>:</p>
+<p>-Click & Drag to rotate the sphere.</p>
+<p>-<b>Camera Mode</b>:</p>
+<p>-Click & Drag to move the camera up, down, left, and right.</p>
+<p>-Press and hold 'W' or 'S' to move the camera forward or backward.</p>
+<p>-<b>FOV Mode</b>:</p>
+<p>-Click & Drag up to decrease the field of view.(10 degree minimum)</p>
+<p>-Click & Drag down to increase the field of view.(170 degree maximum)</p>
+<p>-<b>Light Mode</b>:</p>
+<p>-Click & Drag to move the light source along the X and Y axes.</p>
+</body>
+
+</body>
+</html>

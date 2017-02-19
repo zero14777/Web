@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<title>Lab2</title>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+
+uniform float transX;
+uniform float transY;
+
+void
+main()
+{
+    gl_Position = vPosition;
+	gl_Position.x = gl_Position.x + transX;
+	gl_Position.y = gl_Position.y + transY;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+uniform float colourX;
+uniform float colourY;
+uniform float colourZ;
+
+void
+main()
+{
+    gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0 );
+
+		gl_FragColor.x = colourX;
+		gl_FragColor.y = colourY;
+		gl_FragColor.z = colourZ;
+
+}
+</script>
+
+
+<script type="text/javascript" src="./webgl-utils.js"></script>
+<script type="text/javascript" src="./initShaders.js"></script>
+<script type="text/javascript" src="./MV.js"></script>
+<script type="text/javascript" src="./gasket2.js"></script>
+</head>   
+
+<body>
+
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+<div>
+Subdivisions 1 <input id="subdivideSlider" type="range"
+ min="1" max="9" step="1" value="1" />
+ 9
+</div>
+
+<div id="score"></div>
+
+<button id="clickDragMode">Click & Drag</button>
+
+<button id="paintMode">Paint</button>
+
+<button id="gameMode">Game</button>
+
+<button id="reset">Reset</button>
+
+<p><b>INSTRUCTIONS: </b></p>
+<p>-Press 'r', 'g', 'b' to change the color of the image.</p>
+<p>-Reset resets the position of the gasket and clears any painted triangles.</p>
+<p>-Use the Click & Drag, Paint, and Game buttons to swap between modes.</p>
+<p>-Click & Drag mode lets you click and drag to move around the image on the canvas.</p>
+<p>-Paint lets you click and drag to paint triangles on the canvas.</p>
+<p>Game:</p>
+<p>-Use WASD to move up down left and right.</p>
+<p>-Collect the purple squares that appear on the screen</p>
+
+</body>
+</html>

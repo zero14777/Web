@@ -16,7 +16,7 @@ var PHONG_VSHADER =
 
   'void main() {\n' +
   '  vTData = tData;\n' +
-  
+
   '  vec4 position = u_position;\n' +
   '  position.x = position.x + a_Position.x;\n' +
   '  position.y = position.y + a_Position.y;\n' +
@@ -30,7 +30,7 @@ var PHONG_VSHADER =
   '}\n'
 ;
 
-var PHONG_FSHADER = 
+var PHONG_FSHADER =
   '#ifdef GL_ES\n' +
   'precision mediump float;\n' +
   '#endif\n' +
@@ -45,7 +45,7 @@ var PHONG_FSHADER =
   'uniform vec3 u_AmbientLight;\n' +    // Ambient light color
   'uniform vec3 u_SpecularLight;\n' +   // Specular light intensity
   'uniform sampler2D uSampler;\n' +
-  
+
   'void main() {\n' +
   '  vec4 color = texture2D(uSampler, vTData);\n' +
 
@@ -62,7 +62,7 @@ var PHONG_FSHADER =
   '  vec3 specular = vec3(0.0);\n' +
   '  if( sDotN > 0.0 )\n' +
   '     specular = u_SpecularLight * vec3(1.0, 1.0, 1.0) * pow( max( dot(r,v), 0.0 ), 100.0);\n' +
-  
+
   '  gl_FragColor = vec4(ambient + diffuse + specular, color.a);\n' +
   '}\n'
 ;
@@ -73,7 +73,7 @@ var PASS_VSHADER =
   'attribute vec2 tData;\n' +
 
   'varying vec2 vTData;\n' +
-  
+
   'uniform mat4 u_MvpMatrix;\n' +
   'uniform vec4 u_position;\n' +
 
@@ -89,15 +89,15 @@ var PASS_VSHADER =
   '}\n'
 ;
 
-var PASS_FSHADER = 
+var PASS_FSHADER =
   '#ifdef GL_ES\n' +
   'precision mediump float;\n' +
   '#endif\n' +
 
   'varying vec2 vTData;\n' +
-  
+
   'uniform sampler2D uSampler;\n' +
-  
+
   'void main() {\n' +
   '   gl_FragColor = texture2D(uSampler, vTData);\n' +
   '}\n'
@@ -137,10 +137,10 @@ var FLOOR_PHONG_FSHADER =
   'uniform vec3 u_LightPosition;\n' +   // Position of the light source
   'uniform vec3 u_AmbientLight;\n' +    // Ambient light color
   'uniform sampler2D uSampler;\n' +
-  
+
   'void main() {\n' +
   '  vec4 color = texture2D(uSampler, color);\n' +
-  
+
   '  vec3 n = normalize(Normal.xyz);\n' +
   '  vec3 s = normalize(u_LightPosition - vtxWorldPosition.xyz);\n' +
   '  vec3 v = normalize(-vtxEyePosition.xyz);\n' +
@@ -233,25 +233,25 @@ function main() {
   gl.enable(gl.DEPTH_TEST);
 
 	checkerBoard = new Uint8Array(4*64*64);
-	
+
 	for (var o = 0; o <64; ++o)
 	{
 		for (var p = 0; p <64; ++p)
 		{
 			var patchx = Math.floor(o/8);
 			var patchy = Math.floor(p/8);
-			
+
 			var c = (patchx%2 !== patchy%2 ? 255 : 0);
-			
+
 			checkerBoard[4*o*64+4*p] = c;
 			checkerBoard[4*o*64+4*p+1] = c;
 			checkerBoard[4*o*64+4*p+2] = c;
 			checkerBoard[4*o*64+4*p+3] = 255;
 		}
 	}
-	
+
 	checkerBoardTexture = gl.createTexture();
-	
+
 	gl.bindTexture(gl.TEXTURE_2D, checkerBoardTexture);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 64, 64, 0, gl.RGBA, gl.UNSIGNED_BYTE, checkerBoard);
@@ -259,20 +259,20 @@ function main() {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
     gl.bindTexture(gl.TEXTURE_2D, null);
-	
+
 	checkerBoardTextureNOMIP = gl.createTexture();
-	
+
 	gl.bindTexture(gl.TEXTURE_2D, checkerBoardTextureNOMIP);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 64, 64, 0, gl.RGBA, gl.UNSIGNED_BYTE, checkerBoard);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.bindTexture(gl.TEXTURE_2D, null);
-	
+
 	sphereTextureA = gl.createTexture();
     sphereTextureA.image = new Image();
-	sphereTextureA.image.src = "../img/texture1.png";
-	
+	sphereTextureA.image.src = "texture1.png";
+
     sphereTextureA.image.onload = function() {
       handleLoadedTexture(sphereTextureA, gl);
 	  if(firstLoad){
@@ -280,11 +280,11 @@ function main() {
 		render(gl, canvas);
 	  }
     }
-	
+
 	sphereTextureB = gl.createTexture();
     sphereTextureB.image = new Image();
-	sphereTextureB.image.src = "../img/texture2.png";
-	
+	sphereTextureB.image.src = "texture2.png";
+
 	sphereTextureB.image.onload = function() {
       handleLoadedTexture(sphereTextureB, gl);
 	  if(firstLoad){
@@ -292,11 +292,11 @@ function main() {
 		render(gl, canvas);
 	  }
     }
-	
+
 	sphereTextureC = gl.createTexture();
     sphereTextureC.image = new Image();
-	sphereTextureC.image.src = "../img/texture3.png";
-	
+	sphereTextureC.image.src = "texture3.png";
+
 	sphereTextureC.image.onload = function() {
       handleLoadedTexture(sphereTextureC, gl);
 	  if(firstLoad){
@@ -304,11 +304,11 @@ function main() {
 		render(gl, canvas);
 	  }
     }
-	
+
 	sphereTextureANOMIP = gl.createTexture();
     sphereTextureANOMIP.image = new Image();
-	sphereTextureANOMIP.image.src = "../img/texture1.png";
-	
+	sphereTextureANOMIP.image.src = "texture1.png";
+
 	sphereTextureANOMIP.image.onload = function() {
       handleLoadedTextureNoMipmap(sphereTextureANOMIP, gl);
 	  if(firstLoad){
@@ -316,11 +316,11 @@ function main() {
 		render(gl, canvas);
 	  }
     }
-	
+
 	sphereTextureBNOMIP = gl.createTexture();
     sphereTextureBNOMIP.image = new Image();
-	sphereTextureBNOMIP.image.src = "../img/texture2.png";
-	
+	sphereTextureBNOMIP.image.src = "texture2.png";
+
 	sphereTextureBNOMIP.image.onload = function() {
       handleLoadedTextureNoMipmap(sphereTextureBNOMIP, gl);
 	  if(firstLoad){
@@ -328,11 +328,11 @@ function main() {
 		render(gl, canvas);
 	  }
     }
-	
+
 	sphereTextureCNOMIP = gl.createTexture();
     sphereTextureCNOMIP.image = new Image();
-	sphereTextureCNOMIP.image.src = "../img/texture3.png";
-	
+	sphereTextureCNOMIP.image.src = "texture3.png";
+
 	sphereTextureCNOMIP.image.onload = function() {
       handleLoadedTextureNoMipmap(sphereTextureCNOMIP, gl);
 	  if(firstLoad){
@@ -340,7 +340,7 @@ function main() {
 		render(gl, canvas);
 	  }
     }
-	
+
   render(gl, canvas);
 
   document.getElementById( "shadeOn" ).onclick = function () {
@@ -352,7 +352,7 @@ function main() {
     shade = false;
     render(gl, canvas);
   }
-  
+
   document.getElementById( "mipmapOn" ).onclick = function () {
     mipmap = 1;
     render(gl, canvas);
@@ -362,7 +362,7 @@ function main() {
     mipmap = 0;
     render(gl, canvas);
   }
-	
+
   window.onkeydown = function( event ) {
     var key = String.fromCharCode(event.keyCode);
     switch( key ) {
@@ -407,7 +407,7 @@ function main() {
       case 'L':
         yLight -= 1.0;
         break;
-		
+
 	  case 'C':
         moveX -= 1.0;
         break;
@@ -431,19 +431,19 @@ function main() {
       case 'N':
         moveY -= 1.0;
         break;
-		
+
 	  case '1':
         textureSet = 1;
         break;
-		
+
       case '2':
         textureSet = 2;
         break;
-		
+
 	  case '3':
         textureSet = 3;
         break;
-		
+
       case '4':
         textureSet = 4;
         break;
@@ -451,7 +451,7 @@ function main() {
 
     if (angleEye > 360.0) angleEye -= 360.0;
     if (angleEye < 0.0) angleEye += 360.0;
-	
+
 	render(gl, canvas);
   }
 }
@@ -465,7 +465,7 @@ function main() {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
     gl.bindTexture(gl.TEXTURE_2D, null);
   }
-  
+
     function handleLoadedTextureNoMipmap(texture, gl) {
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -581,7 +581,7 @@ function renderFloor(gl, canvas) {
   gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
 
   gl.activeTexture(gl.TEXTURE0);
-  
+
   if(mipmap === 1){
 	if(textureSet === 1){
 		gl.bindTexture(gl.TEXTURE_2D, checkerBoardTexture);
@@ -603,7 +603,7 @@ function renderFloor(gl, canvas) {
 		gl.bindTexture(gl.TEXTURE_2D, sphereTextureBNOMIP);
 	}
   }
-  
+
   gl.uniform1i(gl.getUniformLocation(gl.program, 'uSampler'), 0);
 
   gl.drawArrays( gl.TRIANGLES, 0, points.length );
@@ -666,12 +666,12 @@ function renderSphere(gl, canvas) {
 	var sphereTextureBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, sphereTextureBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureData), gl.STATIC_DRAW);
-	
+
     sphereTextureBuffer.numItems = textureBuffLen;
 	var tDataLoc = gl.getAttribLocation(gl.program, 'tData');
     gl.vertexAttribPointer(tDataLoc, 2, gl.FLOAT, false, 0, 0);
 	gl.enableVertexAttribArray(tDataLoc);
-	
+
 	gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, sphereTextureA);
     gl.uniform1i(gl.getUniformLocation(gl.program, 'uSampler'), 0);
@@ -757,7 +757,7 @@ function renderSphere(gl, canvas) {
   gl.uniform3f(u_AmbientLight, 0.2, 0.2, 0.2);
   // Set the specular light
   gl.uniform3f(u_SpecularLight, 1.0, 1.0, 1.0);
-  
+
   gl.uniform4f(u_position, moveX, moveY, moveZ, 0.0);
 
   var modelMatrix = new Matrix4();// Model matrix
@@ -796,7 +796,7 @@ function renderSphere(gl, canvas) {
   gl.uniformMatrix4fv(u_NormalMatrix, false, normalMatrix.elements);
 
   gl.activeTexture(gl.TEXTURE0);
-  
+
   if(mipmap === 1){
 	if(textureSet === 1){
 		gl.bindTexture(gl.TEXTURE_2D, checkerBoardTexture);
@@ -818,9 +818,9 @@ function renderSphere(gl, canvas) {
 		gl.bindTexture(gl.TEXTURE_2D, sphereTextureBNOMIP);
 	}
   }
-  
+
   gl.uniform1i(gl.getUniformLocation(gl.program, 'uSampler'), 0);
-  
+
   // Draw.
   gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_SHORT, 0);
 }

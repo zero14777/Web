@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from PeterNet import views as PeterNet
 
 urlpatterns = [
+    url(r'^$', PeterNet.home, name='home'),
     url(r'^admin/', admin.site.urls),
 ]

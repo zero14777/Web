@@ -20,5 +20,9 @@ from PeterNet import views as PeterNet
 urlpatterns = [
     url(r'^$', PeterNet.home, name='home'),
 	url(r'^lab1/', PeterNet.lab1, name='lab1'),
+	url(r'^lab2/', PeterNet.lab2, name='lab2'),
+	url(r'^lab3/', PeterNet.lab3, name='lab3'),
+	url(r'^lab4/', PeterNet.lab4, name='lab4'),
+	url(r'^lab5/', PeterNet.lab5, name='lab5'),
     url(r'^admin/', admin.site.urls),
 ]

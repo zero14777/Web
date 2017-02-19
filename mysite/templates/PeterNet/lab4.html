@@ -10,21 +10,20 @@ attribute vec3 vPosition;
 attribute vec3 vColor;
 varying vec4 color;
 uniform mat4 transform;
+uniform mat4 projection;
 
 void
 main()
 {
-	gl_Position.x = vPosition.x * transform[0][0] + vPosition.y * transform[1][0] + vPosition.z * transform[2][0] + 1.0 * transform[3][0];
-	gl_Position.y = vPosition.x * transform[0][1] + vPosition.y * transform[1][1] + vPosition.z * transform[2][1] + 1.0 * transform[3][1];
-	gl_Position.z = vPosition.x * transform[0][2] + vPosition.y * transform[1][2] + vPosition.z * transform[2][2] + 1.0 * transform[3][2];
-	gl_Position[3] = vPosition.x * transform[0][3] + vPosition.y * transform[1][3] + vPosition.z * transform[2][3] + 1.0 * transform[3][3];
+	gl_Position = projection * transform * vec4(vPosition, 1.0);
+
     color = vec4(vColor, 1.0);
 }
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">
 precision mediump float;
-   
+
 varying vec4 color;
 
 void
@@ -34,11 +33,11 @@ main()
 }
 </script>
 
-<script type="text/javascript" src="webgl-utils.js"></script>
-<script type="text/javascript" src="initShaders.js"></script>
-<script type="text/javascript" src="MV.js"></script>
-<script type="text/javascript" src="gasket3.js"></script>
-</head>   
+<script type="text/javascript" src="/static/scripts/webgl-utils.js"></script>
+<script type="text/javascript" src="/static/scripts/initShaders.js"></script>
+<script type="text/javascript" src="/static/scripts/MV.js"></script>
+<script type="text/javascript" src="/static/scripts/gasket4.js"></script>
+</head>
 
 <body>
 <canvas id="gl-canvas" width="512" height="512">
@@ -59,14 +58,22 @@ Subdivisions 1 <input id="subdivideSlider" type="range"
 
 <button id="rotateZ">RotateZ</button>
 
-<p><b>INSTRUCTIONS: </b></p>
+<p><b>INSTRUCTIONS</b>:</p>
 <p>-The Subdivisions slider lets you control how many subdivision the gasket has.</p>
 <p>-The RotateX, RotateY, and RotateZ buttons rotate the gasket 90 degrees around the gasket's X, Y and Z axes respectively.</p>
-<p>-'W', 'A', 'S', and 'D' move the gasket up, down, left, and right. (You can press and hold)</p>
-<p>-'R' and 'F' push the gasket in and out. (You can press and hold)</p>
-<p>-You can click and drag to translate or rotate the mouse depending on what mode you're in.</p>
+<p>-The camera will always look at the gasket.</p>
 <p>-Press 'E' to swap between mouse modes. (You can't swap while holding down the mouse)</p>
-
+<p>-<b>Translate Mode</b>:</p>
+<p>-Click & Drag to move the gasket up, down, left, and right.</p>
+<p>-Press and hold 'W' or 'S' to move the gasket forward or backward.</p>
+<p>-<b>Rotate Mode</b>:</p>
+<p>-Click & Drag to rotate the gasket.</p>
+<p>-<b>Camera Mode</b>:</p>
+<p>-Click & Drag to move the camera up, down, left, and right.</p>
+<p>-Press and hold 'W' or 'S' to move the camera forward or backward.</p>
+<p>-<b>FOV Mode</b>:</p>
+<p>-Click & Drag up to decrease the field of view.(10 degree minimum)</p>
+<p>-Click & Drag down to increase the field of view.(170 degree maximum)</p>
 </body>
 
 </body>

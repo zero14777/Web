@@ -52,14 +52,14 @@ window.onload = function init()
 	points = [];
 
     canvas = document.getElementById( "gl-canvas" );
-    
+
     gl = WebGLUtils.setupWebGL( canvas );
     if ( !gl ) { alert( "WebGL isn't available" ); }
 
 	// Create and transform the plane that the gasket floats above
-	
+
 	fillPlane();
-	
+
 	document.getElementById('mouseMode').innerHTML = "MODE: Translate";
 
     //
@@ -69,14 +69,14 @@ window.onload = function init()
     // First, initialize the vertices of our 3D gasket
     // Four vertices on unit circle
     // Intial tetrahedron with equal length sides
-	
+
     var vertices = [
         vec3(  0.0000,  0.0000, -1.0000 ),
         vec3(  0.0000,  0.9428,  0.3333 ),
         vec3( -0.8165, -0.4714,  0.3333 ),
         vec3(  0.8165, -0.4714,  0.3333 )
     ];
-    
+
     divideTetra( vertices[0], vertices[1], vertices[2], vertices[3],
                  NumTimesToSubdivide);
 
@@ -85,41 +85,41 @@ window.onload = function init()
     //
     gl.viewport( 0, 0, canvas.width, canvas.height );
     gl.clearColor( 0.5, 0.5, 1.0, 1.0 );
-    
+
     // enable hidden-surface removal
-    
+
     gl.enable(gl.DEPTH_TEST);
 
     //  Load shaders and initialize attribute buffers
-    
+
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
-	
+
 	transformLoc = gl.getUniformLocation(program, "transform");
 	projectLoc = gl.getUniformLocation(program, "projection");
-	
+
 	// Various event listener functions to make the program react to user input.
-	
+
 	document.getElementById("subdivideSlider").onchange = function(event) {
         NumTimesToSubdivide = event.target.value;
 		reGasket(1);
     };
-	
+
 	document.getElementById("rotateX").onclick = function () {
 		rotateX += Math.PI/2;
 		reGasket(0);
     };
-	
+
 	document.getElementById("rotateY").onclick = function () {
 		rotateY += Math.PI/2;
 		reGasket(0);
     };
-	
+
 	document.getElementById("rotateZ").onclick = function () {
 		rotateZ += Math.PI/2;
 		reGasket(0);
     };
-	
+
 	window.onkeydown = function( event ) {
         var key = String.fromCharCode(event.keyCode);
         switch( key ) {
@@ -130,7 +130,7 @@ window.onload = function init()
 					reGasket(0);
 					break;
 				  case 1:
-					
+
 					break;
 				  case 2:
 					cameraZ -= 0.1;
@@ -145,7 +145,7 @@ window.onload = function init()
 					reGasket(0);
 					break;
 				  case 1:
-					
+
 					break;
 				  case 2:
 					cameraZ += 0.1;
@@ -178,32 +178,32 @@ window.onload = function init()
             break;
 		}
 	}
-	
+
 	canvas.onmousedown = function (event) {
 		moveX = 0.0;
 		moveY = 0.0;
-	
+
 		downX = event.pageX;
 		downY = event.pageY;
-		
+
 		downTransX = transX;
 		downTransY = transY;
-		
+
 		downRotateX = rotateX;
 		downRotateY = rotateY;
-		
+
 		downCameraX = cameraX;
 		downCameraY = cameraY;
-		
+
 		downFOV = fieldOfView;
-		
+
 		mouse = true;
 	}
-	
+
 	document.onmouseup = function (event) {
 		mouse = false;
 	}
-	
+
 	canvas.onmousemove = function (event) {
 		if (mouse)
 			{
@@ -211,7 +211,7 @@ window.onload = function init()
 			  case 0:
 				moveX = event.pageX - downX;
 				moveY = event.pageY - downY;
-			
+
 				transX = downTransX + (moveX / (canvas.width/4));
 				transY = downTransY - (moveY / (canvas.height/4));
 				reGasket(0);
@@ -219,7 +219,7 @@ window.onload = function init()
 			  case 1:
 				moveX = event.pageX - downX;
 				moveY = event.pageY - downY;
-		
+
 				rotateX = downRotateX + (moveY / (canvas.height/10));
 				rotateY = downRotateY + (moveX / (canvas.height/10));
 				reGasket(0);
@@ -227,57 +227,57 @@ window.onload = function init()
 			  case 2:
 				moveX = event.pageX - downX;
 				moveY = event.pageY - downY;
-			
+
 				cameraX = downCameraX + (moveX / (canvas.height/10));
 				cameraY = downCameraY - (moveY / (canvas.height/10));
 				reGasket(0);
 				break;
 			  case 3:
 				moveY = event.pageY - downY;
-				
+
 				fieldOfView = downFOV + (moveY / (canvas.height/100));
-				
+
 				if(fieldOfView >= 170)
 				{
 					fieldOfView = 170;
 				}
-				
+
 				if(fieldOfView <= 10)
 				{
 					fieldOfView = 10;
 				}
-				
+
 				reGasket(0);
 				break;
 			}
 		}
 	}
-    
+
     // Create a buffer object, initialize it, and associate it with the
     //  associated attribute variable in our vertex shader
-    
+
 	planeCBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, planeCBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(planeColors), gl.STATIC_DRAW );
-    
+
     planeVColor = gl.getAttribLocation( program, "vColor" );
     gl.vertexAttribPointer( planeVColor, 3, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( planeVColor );
-	
+
 	planeBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, planeBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(plane), gl.STATIC_DRAW );
-	
+
 	planeVPosition = gl.getAttribLocation( program, "vPosition" );
     gl.vertexAttribPointer( planeVPosition, 3, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( planeVPosition );
 
 	renderPlane();
-	
+
     cBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(colors), gl.STATIC_DRAW );
-    
+
     vColor = gl.getAttribLocation( program, "vColor" );
     gl.vertexAttribPointer( vColor, 3, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vColor );
@@ -289,7 +289,7 @@ window.onload = function init()
     vPosition = gl.getAttribLocation( program, "vPosition" );
     gl.vertexAttribPointer( vPosition, 3, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
-	
+
     render();
 };
 
@@ -304,18 +304,18 @@ function reGasket(recreate)
     if (recreate)
 	{
 	points = [];
-	
+
 	var vertices = [
         vec3(  0.0000,  0.0000, -1.0000 ),
         vec3(  0.0000,  0.9428,  0.3333 ),
         vec3( -0.8165, -0.4714,  0.3333 ),
         vec3(  0.8165, -0.4714,  0.3333 )
     ];
-    
+
     divideTetra( vertices[0], vertices[1], vertices[2], vertices[3],
                  NumTimesToSubdivide);
 	}
-	
+
     // Create a buffer object, initialize it, and associate it with the
     //  associated attribute variable in our vertex shader
 
@@ -363,19 +363,19 @@ function fillPlane()
 	var altitudes = [];
 	var dataReader = 0;
 	var squareSize = 0.125
-	
+
 	var fileName = "hawaiiRawData.txt";
 	var rawFile = new XMLHttpRequest();
 	var allText;
 	var read = 1;
 
 	rawFile.open("GET", fileName, false);
-	
+
 	rawFile.onreadystatechange = function ()
     {
-	
+
 		allText = rawFile.responseText;
-	
+
 		for (i = 0; i < 256; i += 1)
 		{
 			altitudes[i] = [];
@@ -389,7 +389,7 @@ function fillPlane()
 					value = value + (allText.charCodeAt(dataReader)) - 48;
 					dataReader++;
 				}
-					
+
 				if (read)
 				{
 					altitudes[y][x] = (value/256) - 1;
@@ -404,12 +404,12 @@ function fillPlane()
 			x = 0;
 		}
 	}
-	
+
 	rawFile.send(null);
-	
+
 	x = 0;
 	y = 0;
-	
+
 	for (i = -8.0; i < 8.0; i += squareSize)
 	{
 		for (j = -8.0; j < 8.0; j += squareSize)
@@ -436,12 +436,12 @@ function fillPlane()
 				planeTriangle(temp1, temp2, temp3, 1);
 				planeTriangle(temp4, temp5, temp6, 1);
 			}
-			
+
 			x++;
 		}
 		y++;
 		x = 0;
-		
+
 		if(color == 0)
 		{
 			color = 1;
@@ -449,7 +449,7 @@ function fillPlane()
 			color = 0;
 		}
 	}
-	
+
 }
 
 // A function to push all the triangles needed to create the bumpy plane
@@ -497,7 +497,7 @@ function tetra( a, b, c, d )
 {
     // tetrahedron with each side using
     // a different color
-    
+
     triangle( a, c, b, 0 );
     triangle( a, c, d, 1 );
     triangle( a, b, d, 2 );
@@ -507,14 +507,14 @@ function tetra( a, b, c, d )
 function divideTetra( a, b, c, d, count )
 {
     // check for end of recursion
-    
+
     if ( count === 0 ) {
         tetra( a, b, c, d );
     }
-    
+
     // find midpoints of sides
     // divide four smaller tetrahedra
-    
+
     else {
         var ab = mix( a, b, 0.5 );
         var ac = mix( a, c, 0.5 );
@@ -524,7 +524,7 @@ function divideTetra( a, b, c, d, count )
         var cd = mix( c, d, 0.5 );
 
         --count;
-        
+
         divideTetra(  a, ab, ac, ad, count );
         divideTetra( ab,  b, bc, bd, count );
         divideTetra( ac, bc,  c, cd, count );
@@ -537,14 +537,14 @@ function divideTetra( a, b, c, d, count )
 
 function myTranslate(oldUniform, transX, transY, transZ)
 {
-	
+
 	var translate = mat4(1.0, 0.0, 0.0, transX,
 						 0.0, 1.0, 0.0, transY,
 						 0.0, 0.0, 1.0, transZ,
 						 0.0, 0.0, 0.0, 1.0);
-	
+
 	var newUniform = mult (oldUniform, translate);
-	
+
 	return newUniform;
 }
 
@@ -555,7 +555,7 @@ function myRotate(oldUniform, axis, theta)
 {
 	var newUniform;
 	var rotateMatrix;
-	
+
 	switch( axis ) {
         case 'X':
 			rotateMatrix = mat4(1.0, 0.0, 0.0, 0.0,
@@ -578,7 +578,7 @@ function myRotate(oldUniform, axis, theta)
         }
 
 	newUniform = mult(oldUniform, rotateMatrix);
-	
+
 	return newUniform;
 }
 
@@ -587,16 +587,16 @@ function myRotate(oldUniform, axis, theta)
 function cameraPerspective(oldUniform, isPlane)
 {
 	var newUniform;
-	
+
 	var perspectiveMatrix = perspective(fieldOfView, 1, 0.1, 20);
-	
+
 	newUniform = mult(perspectiveMatrix, oldUniform);
-	
+
 	if(isPlane)
 	{
 		newUniform = myTranslate(newUniform, 0.0, 0.0, -5.0);
 	}
-	
+
 	return newUniform;
 }
 
@@ -605,15 +605,15 @@ function cameraPerspective(oldUniform, isPlane)
 function cameraLocation(oldUniform)
 {
 	var newUniform;
-	
+
 	var eye = [cameraX, cameraY, cameraZ];
 	var at = [transX, transY, transZ];
 	var up = [0.0, 1.0, 0.0];
-	
+
 	var cameraMatrix = lookAt(eye, at, up);
-	
+
 	newUniform = mult(cameraMatrix, oldUniform);
-	
+
 	return newUniform;
 }
 
@@ -622,33 +622,33 @@ function cameraLocation(oldUniform)
 function renderPlane()
 {
 	gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	
+
 	var planeTransform = mat4(1.0, 0.0, 0.0, 0.0,
 						  0.0, 1.0, 0.0, 0.0,
 						  0.0, 0.0, 1.0, 0.0,
 						  0.0, 0.0, 0.0, 1.0);
-						  
+
 	var planeProject = mat4(1.0, 0.0, 0.0, 0.0,
 						  0.0, 1.0, 0.0, 0.0,
 						  0.0, 0.0, 1.0, 0.0,
 						  0.0, 0.0, 0.0, 1.0);
-	
+
 	planeTransform = myRotate(planeTransform, 'X', -1.5);
-	
+
 	planeTransform = myTranslate(planeTransform, 0.0, 0.0, -1.0);
-		
+
 	planeProject = cameraLocation(planeProject);
-	
+
 	planeProject = cameraPerspective(planeProject, 0);
-	
+
 	gl.uniformMatrix4fv(transformLoc, false, flatten(planeTransform));
-	
+
 	gl.uniformMatrix4fv(projectLoc, false, flatten(planeProject));
-	
+
 	gl.drawArrays( gl.TRIANGLES, 0, plane.length );
 }
 
-// The render function calculates the proper transformation matrix and 
+// The render function calculates the proper transformation matrix and
 // renders the gasket.
 
 function render()
@@ -657,25 +657,25 @@ function render()
 						  0.0, 1.0, 0.0, 0.0,
 						  0.0, 0.0, 1.0, 0.0,
 						  0.0, 0.0, 0.0, 1.0);
-						  
+
 	var projection = mat4(1.0, 0.0, 0.0, 0.0,
 						  0.0, 1.0, 0.0, 0.0,
 						  0.0, 0.0, 1.0, 0.0,
 						  0.0, 0.0, 0.0, 1.0);
-	
+
 	transformation = myTranslate(transformation, transX, transY, transZ);
-	
+
 	transformation = myRotate(transformation, 'X', rotateX);
 	transformation = myRotate(transformation, 'Y', rotateY);
 	transformation = myRotate(transformation, 'Z', rotateZ);
-	
+
 	projection = cameraLocation(projection);
-	
+
 	projection = cameraPerspective(projection, 0);
 
 	gl.uniformMatrix4fv(transformLoc, false, flatten(transformation));
-	
+
 	gl.uniformMatrix4fv(projectLoc, false, flatten(projection));
-	
+
     gl.drawArrays( gl.TRIANGLES, 0, points.length );
 }

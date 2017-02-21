@@ -24,5 +24,6 @@ urlpatterns = [
 	url(r'^lab3/', PeterNet.lab3, name='lab3'),
 	url(r'^lab4/', PeterNet.lab4, name='lab4'),
 	url(r'^lab5/', PeterNet.lab5, name='lab5'),
+	url(r'^warp/', PeterNet.warp, name='warp'),
     url(r'^admin/', admin.site.urls),
 ]

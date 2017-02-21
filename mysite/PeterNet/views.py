@@ -18,3 +18,6 @@ def lab4(request):
 
 def lab5(request):
     return render(request,"PeterNet/lab5.html")
+	
+def warp(request):
+    return render(request,"PeterNet/warp.html")

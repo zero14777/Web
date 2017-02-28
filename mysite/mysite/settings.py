@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'b%l=nm&2)55hoj0l=_-10v2%%rp4raw&p96&5=dpb+-028jsma'
+SECRET_KEY = 'v820vilf_we(%k=f6p@fx3i*v14hj5zekxq=t&h%^51m1gr@2z'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'PeterNet',
+    'users',
+    'home',
 ]
 
 MIDDLEWARE = [
@@ -76,8 +77,11 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'pbgreerb$default',
+        'USER': 'pbgreerb',
+        'PASSWORD': 'getmein123',
+        'HOST': 'pbgreerb.mysql.pythonanywhere-services.com',
     }
 }
 

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Check for error messages from bad form data -->
+{% if messages %}
+    {% for message in messages %}
+        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+<input type="text" name="username" placeholder="Username" autofocus>
+<input type="password" name="password" placeholder="Password">
+<button type="submit">Sign in</button>
+Don't have an account yet?
+<a class="" href="{%url 'signup'%}">
+    Create an account
+</a>
+{% endblock %}

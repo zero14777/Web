@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-# http://stackoverflow.com/questions/13202845/removing-help-text-from-django-usercreateform	
+# http://stackoverflow.com/questions/13202845/removing-help-text-from-django-usercreateform
 class UserCreateForm(UserCreationForm):
     email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'class':"form-control", 'placeholder':"Email"}))
     first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':"form-control", 'placeholder':"First Name"}))
@@ -28,8 +28,8 @@ class UserCreateForm(UserCreationForm):
         email = self.cleaned_data.get('email')
         email_base, provider = email.split("@")
         domain, extension = provider.split('.')
-        if not extension == "edu":
-            raise forms.ValidationError("Please use valid .edu email address.")
+        #if not extension == "edu":
+        #    raise forms.ValidationError("Please use valid .edu email address.")
         try:
             User.objects.get(email=email)
         except User.DoesNotExist:

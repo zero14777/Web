@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+        	<form method="POST" class="form-signin wow fadeInUp" action=""> {% csrf_token %}
+                <h2 class="form-signin-heading">Edit Account Info</h2>
+                	{% if form.errors %}
+    					<p>Errors in form</p>
+					{% endif %}
+					{{form}}
+                    <button type="submit">Save Changes</button>
+                    <a href="/">Cancel</a>
+            </form>
+{% endblock %}

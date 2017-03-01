@@ -6,9 +6,11 @@
         <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
     {% endfor %}
 {% endif %}
-<input type="text" name="username" placeholder="Username" autofocus>
-<input type="password" name="password" placeholder="Password">
-<button type="submit">Sign in</button>
+<form method="post"> {% csrf_token %}
+    <input type="text" name="username" placeholder="Username" autofocus>
+    <input type="password" name="password" placeholder="Password">
+    <button type="submit">Sign in</button>
+</form>
 Don't have an account yet?
 <a class="" href="{%url 'signup'%}">
     Create an account

@@ -23,13 +23,11 @@ class UserCreateForm(UserCreationForm):
             return username
         raise forms.ValidationError('The username is already taken. Please try with another.')
 
-    # Check for a valid .edu email accounts
+    # Check for a valid email accounts
     def clean_email(self):
         email = self.cleaned_data.get('email')
         email_base, provider = email.split("@")
         domain, extension = provider.split('.')
-        #if not extension == "edu":
-        #    raise forms.ValidationError("Please use valid .edu email address.")
         try:
             User.objects.get(email=email)
         except User.DoesNotExist:
@@ -62,7 +60,6 @@ class UpdateProfile(forms.ModelForm):
         fields = ("first_name", "last_name", "username", "email")
 
     # Check that username doesn't already exist
-    # http://stackoverflow.com/questions/23361057/django-comparing-old-and-new-field-value-before-saving
     def clean_username(self):
         username=self.cleaned_data['username']
         try:
@@ -71,15 +68,14 @@ class UpdateProfile(forms.ModelForm):
             return username
         if "username" in self.changed_data:
             raise forms.ValidationError('The username is already taken. Please try with another.')
+        return username
 
 
-    # Check for a valid .edu email accounts
+    # Check for a valid email accounts
     def clean_email(self):
         email = self.cleaned_data.get('email')
         email_base, provider = email.split("@")
         domain, extension = provider.split('.')
-        if not extension == "edu":
-            raise forms.ValidationError("Please use valid .edu email address.")
         try:
             User.objects.get(email=email)
         except User.DoesNotExist:

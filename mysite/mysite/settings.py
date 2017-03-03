@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pbgreerb$default',
         'USER': 'pbgreerb',
-        'PASSWORD': 'getmein123',
+        'PASSWORD': 'temppass123',
         'HOST': 'pbgreerb.mysql.pythonanywhere-services.com',
     }
 }
@@ -118,6 +118,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Enable HTTPS
+SECURE_SSL_REDIRECT = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/

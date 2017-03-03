@@ -20,6 +20,7 @@ from users import views as users
 
 urlpatterns = [
     url(r'^$', home.Home, name='home'),
+    url(r'^home/page2/$', home.Page2, name='page2'),
     url(r'^accounts/login/$', users.Login, name='login'),
     url(r'^accounts/logout/$', users.Logout, name='logout'),
     url(r'^accounts/signup/$', users.Signup, name='signup'),
